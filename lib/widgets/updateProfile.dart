@@ -1,5 +1,6 @@
 // ignore_for_file: must_be_immutable
 
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/foundation.dart';
@@ -118,49 +119,31 @@ class UpdateProfile extends StatelessWidget {
                   isObscureText: true,
                 ),
                 SizedBox(height: 10.0),
+
                 getTextFormField(
                   controller: securityLicense,
                   icon: Icons.security,
                   hintName: 'Security License',
                 ),
                 SizedBox(height: 10.0),
-                TextButton(
-                    onPressed: () {
-                      DatePicker.showDatePicker(context,
-                          showTitleActions: true,
-                          minTime: DateTime(2018, 3, 5),
-                          maxTime: DateTime.now().add(Duration(days: 3600)),
-                          onChanged: (date) {}, onConfirm: (date) {
-                        securityLicenseExpiryDate =
-                            date.toString().split(' ')[0];
-                      }, currentTime: DateTime.now(), locale: LocaleType.en);
-                    },
-                    child: Text(
-                      'Select Date Of License Expiry',
-                      style: TextStyle(color: Colors.blue),
-                    )),
-                SizedBox(height: 10.0),
-                getTextFormField(
-                  controller: ofa,
-                  icon: Icons.document_scanner,
-                  hintName: 'OFA',
+                InkWell(
+                  onTap: () {
+                    DatePicker.showDatePicker(context,
+                        showTitleActions: true,
+                        minTime: DateTime(2018, 3, 5),
+                        maxTime: DateTime.now().add(Duration(days: 3600)),
+                        onChanged: (date) {}, onConfirm: (date) {
+                      securityLicenseExpiryDate = date.toString().split(' ')[0];
+                      provider.userModel!.securityLicenseExpiryDate =
+                          securityLicenseExpiryDate;
+                      context
+                          .read<UserCubit>()
+                          .isUpdate(!context.read<UserCubit>().state.isUpdate!);
+                    }, currentTime: DateTime.now(), locale: LocaleType.en);
+                  },
+                  child: SecurityExpiry(),
                 ),
                 SizedBox(height: 10.0),
-                TextButton(
-                    onPressed: () {
-                      DatePicker.showDatePicker(context,
-                          showTitleActions: true,
-                          minTime: DateTime(2018, 3, 5),
-                          maxTime: DateTime.now().add(Duration(days: 3600)),
-                          onChanged: (date) {}, onConfirm: (date) {
-                        ofaExpiryDate = date.toString().split(' ')[0];
-                      }, currentTime: DateTime.now(), locale: LocaleType.en);
-                    },
-                    child: Text(
-                      'Select Date Of OFA Expiry',
-                      style: TextStyle(color: Colors.blue),
-                    )),
-
                 Builder(builder: (context) {
                   return Padding(
                     padding: const EdgeInsets.only(left: 20.0, right: 30),
@@ -190,6 +173,29 @@ class UpdateProfile extends StatelessWidget {
                     ),
                   );
                 }),
+                SizedBox(height: 10.0),
+                getTextFormField(
+                  controller: ofa,
+                  icon: Icons.document_scanner,
+                  hintName: 'OFA',
+                ),
+                SizedBox(height: 10.0),
+                InkWell(
+                  onTap: () {
+                    DatePicker.showDatePicker(context,
+                        showTitleActions: true,
+                        minTime: DateTime(2018, 3, 5),
+                        maxTime: DateTime.now().add(Duration(days: 3600)),
+                        onChanged: (date) {}, onConfirm: (date) {
+                      ofaExpiryDate = date.toString().split(' ')[0];
+                      provider.userModel!.ofaExpiryDate = ofaExpiryDate;
+                      context
+                          .read<UserCubit>()
+                          .isUpdate(!context.read<UserCubit>().state.isUpdate!);
+                    }, currentTime: DateTime.now(), locale: LocaleType.en);
+                  },
+                  child: OfaExpiry(context),
+                ),
 
                 SizedBox(height: 10.0),
                 Container(
@@ -202,8 +208,7 @@ class UpdateProfile extends StatelessWidget {
                     ),
                     onPressed: () async {
                       DbHelper db = DbHelper.instance;
-                      if (email.text.isNotEmpty &&
-                          password.text.isNotEmpty &&
+                      if (password.text.isNotEmpty &&
                           firstname.text.isNotEmpty &&
                           lastname.text.isNotEmpty) {
                         provider.userModel!.name = firstname.text;
@@ -214,10 +219,6 @@ class UpdateProfile extends StatelessWidget {
                             securityLicense.text;
                         provider.userModel!.ofa = ofa.text;
 
-                        provider.userModel!.securityLicenseExpiryDate =
-                            securityLicenseExpiryDate;
-
-                        provider.userModel!.ofaExpiryDate = ofaExpiryDate;
                         SharedPreferences sp =
                             await SharedPreferences.getInstance();
 
@@ -226,6 +227,9 @@ class UpdateProfile extends StatelessWidget {
                               provider.userModel!.securityLicense.toString());
                           sp.setString(
                               'ofa', provider.userModel!.ofa.toString());
+
+                          sp.setString("userData",
+                              jsonEncode(provider.userModel!.toMap()));
                           alertDialog(context, "User Updated");
                         });
                       }
@@ -260,5 +264,83 @@ class UpdateProfile extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Builder SecurityExpiry() {
+    return Builder(builder: (context) {
+      return Container(
+          height: 50,
+          width: MediaQuery.of(context).size.width * 0.9,
+          decoration: BoxDecoration(
+              color: Colors.grey[200],
+              borderRadius: BorderRadius.circular(30.0)),
+          child: Center(
+            child: Text(
+              context.watch<UserCubit>().state.isUpdate!
+                  ? context
+                              .read<UserCubit>()
+                              .state
+                              .userModel!
+                              .securityLicenseExpiryDate ==
+                          null
+                      ? 'Select Date Of License Expiry'
+                      : context
+                          .read<UserCubit>()
+                          .state
+                          .userModel!
+                          .securityLicenseExpiryDate
+                          .toString()
+                  : context
+                              .read<UserCubit>()
+                              .state
+                              .userModel!
+                              .securityLicenseExpiryDate ==
+                          null
+                      ? 'Select Date Of License Expiry'
+                      : context
+                          .read<UserCubit>()
+                          .state
+                          .userModel!
+                          .securityLicenseExpiryDate
+                          .toString(),
+              style: TextStyle(color: Colors.blue),
+            ),
+          ));
+    });
+  }
+
+  Builder OfaExpiry(BuildContext context) {
+    return Builder(builder: (context) {
+      return Container(
+          height: 50,
+          width: MediaQuery.of(context).size.width * 0.9,
+          decoration: BoxDecoration(
+              color: Colors.grey[200],
+              borderRadius: BorderRadius.circular(30.0)),
+          child: Center(
+            child: Text(
+              context.watch<UserCubit>().state.isUpdate!
+                  ? context.read<UserCubit>().state.userModel!.ofaExpiryDate ==
+                          null
+                      ? 'Select Date Of OFA Expiry'
+                      : context
+                          .read<UserCubit>()
+                          .state
+                          .userModel!
+                          .ofaExpiryDate
+                          .toString()
+                  : context.read<UserCubit>().state.userModel!.ofaExpiryDate ==
+                          null
+                      ? 'Select Date Of OFA Expiry'
+                      : context
+                          .read<UserCubit>()
+                          .state
+                          .userModel!
+                          .ofaExpiryDate
+                          .toString(),
+              style: TextStyle(color: Colors.blue),
+            ),
+          ));
+    });
   }
 }

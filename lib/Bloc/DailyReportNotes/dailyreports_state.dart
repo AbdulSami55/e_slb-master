@@ -12,6 +12,7 @@ class DailyReportsState extends Equatable {
   bool isedit, filter;
   String weather, location;
   ScreenshotController screenshotController;
+  String? currentValue;
 
   DailyReportsState(
       {this.dailyReportNotes,
@@ -22,7 +23,8 @@ class DailyReportsState extends Equatable {
       required this.weather,
       required this.location,
       required this.filter,
-      required this.screenshotController});
+      required this.screenshotController,
+      this.currentValue});
   @override
   List<Object?> get props => [
         dailyReportNotes,
@@ -34,6 +36,7 @@ class DailyReportsState extends Equatable {
         tempdailyreports,
         filter,
         screenshotController,
+        currentValue
       ];
 
   DailyReportsState copywith(
@@ -45,7 +48,8 @@ class DailyReportsState extends Equatable {
       String? weather,
       location,
       ScreenshotController? screenshotController,
-      List<DailyReportNotes>? tempdailyreports}) {
+      List<DailyReportNotes>? tempdailyreports,
+      String? currentValue}) {
     return DailyReportsState(
         dailyReportNotes: dailyReportNotes ?? this.dailyReportNotes,
         lstdailyreports: lstdailyreports ?? this.lstdailyreports,
@@ -55,7 +59,7 @@ class DailyReportsState extends Equatable {
         location: location ?? this.location,
         filter: filter ?? this.filter,
         tempdailyreports: tempdailyreports ?? this.tempdailyreports,
-        screenshotController:
-            screenshotController ?? this.screenshotController);
+        screenshotController: screenshotController ?? this.screenshotController,
+        currentValue: currentValue ?? this.currentValue);
   }
 }

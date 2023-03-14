@@ -16,7 +16,8 @@ class UserState extends Equatable {
         ofaWarning,
         isWarning,
         font,
-        position
+        position,
+        isUpdate
       ];
 
   UserModel? userModel;
@@ -28,6 +29,7 @@ class UserState extends Equatable {
   bool isWarning;
   String font;
   Position? position;
+  bool? isUpdate;
   UserState(
       {this.userModel,
       required this.islisence,
@@ -37,7 +39,8 @@ class UserState extends Equatable {
       required this.ofaWarning,
       required this.isWarning,
       required this.font,
-      this.position});
+      this.position,
+      required this.isUpdate});
 
   UserState copywith(
       {UserModel? userModel,
@@ -48,7 +51,8 @@ class UserState extends Equatable {
       bool? ofaWarning,
       bool? isWarning,
       String? font,
-      Position? position}) {
+      Position? position,
+      bool? isupdate}) {
     return UserState(
         userModel: userModel ?? this.userModel,
         img: img ?? this.img,
@@ -58,6 +62,7 @@ class UserState extends Equatable {
         ofaWarning: ofaWarning ?? this.ofaWarning,
         isWarning: isWarning ?? this.isWarning,
         font: font ?? this.font,
-        position: position ?? this.position);
+        position: position ?? this.position,
+        isUpdate: isupdate ?? this.isUpdate);
   }
 }

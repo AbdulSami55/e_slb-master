@@ -94,14 +94,17 @@ class AddCompanyScreen extends StatelessWidget {
                   ),
                   onPressed: () async {
                     DbHelper db = DbHelper.instance;
-                    if (companyEmail.text.isNotEmpty &&
-                        context.read<CompanyCubit>().state.img != null &&
-                        companyName.text.isNotEmpty) {
+                    if (companyName.text.isNotEmpty) {
                       Company company = Company(
                           companyEmail: companyEmail.text,
                           companyName: companyName.text,
-                          image: String.fromCharCodes(
-                              File(context.read<CompanyCubit>().state.img!.path)
+                          image: context.read<CompanyCubit>().state.img == null
+                              ? null
+                              : String.fromCharCodes(File(context
+                                      .read<CompanyCubit>()
+                                      .state
+                                      .img!
+                                      .path)
                                   .readAsBytesSync()));
                       await db.insertCompanyData(company).then((value) {
                         List<Company> templst =
@@ -110,10 +113,8 @@ class AddCompanyScreen extends StatelessWidget {
                         context.read<CompanyCubit>().setlstCompany(templst);
                         alertDialog(context, "Company Added");
                       });
-                    } else if (context.read<CompanyCubit>().state.img == null) {
-                      alertDialog(context, "Select Image");
                     } else {
-                      alertDialog(context, "Fill all Fileds");
+                      alertDialog(context, "Company Name required");
                     }
                   },
                 ),

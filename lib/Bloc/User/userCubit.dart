@@ -13,10 +13,15 @@ class UserCubit extends Cubit<UserState> {
             securityWarning: false,
             ofaWarning: false,
             isWarning: false,
-            font: ''));
+            font: '',
+            isUpdate: false));
 
   setUser(UserModel userModel) {
-    state.userModel = userModel;
+    emit(state.copywith(userModel: userModel));
+  }
+
+  isUpdate(bool val) {
+    emit(state.copywith(isupdate: val));
   }
 
   setIsLisence(bool islisence) {

@@ -5,10 +5,8 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_complete_guide/Bloc/User/userCubit.dart';
-import 'package:flutter_complete_guide/Bloc/User/userState.dart';
-import 'package:flutter_complete_guide/Comm/commHelper.dart';
 import 'package:image_picker/image_picker.dart';
-
+import '../comm/commHelper.dart';
 import '../DatabaseHandler/DbHelper.dart';
 import '../comm/genTextFormField.dart';
 import '../models/UserModel.dart';
@@ -45,7 +43,9 @@ class _SignupFormState extends State<SignupForm> {
 
     if (_formKey.currentState!.validate()) {
       if (passwd != cpasswd) {
-        //alertDialog(context, 'Password Mismatch');
+        alertDialog(context, 'Password Mismatch');
+      } else if (passwd.length != 4) {
+        alertDialog(context, "Password must be 4 digit");
       } else if (img != null) {
         _formKey.currentState?.save();
         DbHelper db = DbHelper.instance;

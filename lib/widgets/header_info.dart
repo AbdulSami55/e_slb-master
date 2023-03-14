@@ -56,10 +56,17 @@ class _HeaderInfoState extends State<HeaderInfo> {
                 ),
                 state.company != null
                     ? state.company!.image != null
-                        ? CircleAvatar(
-                            radius: 40,
-                            backgroundImage: MemoryImage(Uint8List.fromList(
-                                state.company!.image!.codeUnits)),
+                        ? Container(
+                            height: 80,
+                            width: 80,
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(99),
+                              child: Image.memory(
+                                Uint8List.fromList(
+                                    state.company!.image!.codeUnits),
+                                fit: BoxFit.cover,
+                              ),
+                            ),
                           )
                         : Text(
                             state.company!.companyName.toString(),

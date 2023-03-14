@@ -70,7 +70,7 @@ CREATE TABLE company(
     List<Map<String, dynamic>> templst = await db.query('user');
     for (var val in templst) {
       UserModel userModel = UserModel.fromMap(val);
-      if (userModel.email == user.email &&
+      if (userModel.surname == user.surname &&
           userModel.password == user.password) {
         return -1;
       }
@@ -82,16 +82,17 @@ CREATE TABLE company(
   Future<int?> updateUserData(UserModel user) async {
     Database db = await instance.database;
     int result = await db.update('user', user.toMap(),
-        where: "email=?", whereArgs: [user.email]);
+        where: "surname=?", whereArgs: [user.surname]);
+
     return result;
   }
 
-  Future<UserModel?> getLoginUser(String email, String password) async {
+  Future<UserModel?> getLoginUser(String surname, String password) async {
     Database db = await instance.database;
     List<Map<String, dynamic>> templst = await db.query('user');
     for (var user in templst) {
       UserModel userModel = UserModel.fromMap(user);
-      if (userModel.email == email && userModel.password == password) {
+      if (userModel.surname == surname && userModel.password == password) {
         return userModel;
       }
     }

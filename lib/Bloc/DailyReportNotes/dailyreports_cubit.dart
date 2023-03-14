@@ -22,8 +22,13 @@ class DailyReportsCubit extends Cubit<DailyReportsState> {
   setListDailyReports(List<DailyReportNotes> dailyReportsState, bool islog) {
     List<DailyReportNotes> temp = [];
     for (DailyReportNotes i in dailyReportsState) {
+      i.logs.sort((a, b) {
+        int nameComparison = a.company!.compareTo(b.company!);
+        return nameComparison;
+      });
       temp.add(i);
     }
+
     emit(state.copywith(
         tempdailyreports: temp,
         lstdailyreports: dailyReportsState,

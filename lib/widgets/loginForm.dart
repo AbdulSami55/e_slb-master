@@ -2,10 +2,8 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_complete_guide/Bloc/DailyReportNotes/dailyreports_cubit.dart';
 import 'package:flutter_complete_guide/Bloc/User/userCubit.dart';
 import 'package:flutter_complete_guide/comm/loading.dart';
-import 'package:flutter_complete_guide/models/UserModel.dart';
 import 'package:flutter_complete_guide/widgets/main_log_entry.dart';
 import '../comm/commHelper.dart';
 import '../comm/genLoginSignupHeader.dart';
@@ -54,9 +52,11 @@ class _LoginFormState extends State<LoginForm> {
     String passwd = _conPassword.text;
     SharedPreferences sp = await SharedPreferences.getInstance();
     if (name.isEmpty) {
-      alertDialog(context, "Please Enter User ID");
+      alertDialog(context, "Please Enter Surname");
     } else if (passwd.isEmpty) {
       alertDialog(context, "Please Enter Password");
+    } else if (passwd.length != 4) {
+      alertDialog(context, "Password must be 4 digit");
     } else {
       loading(context);
       DbHelper db = DbHelper.instance;
@@ -110,6 +110,7 @@ class _LoginFormState extends State<LoginForm> {
                     icon: Icons.lock,
                     hintName: 'Password',
                     isObscureText: true,
+                    inputType: TextInputType.number,
                   ),
                   Container(
                     margin: EdgeInsets.all(30.0),
