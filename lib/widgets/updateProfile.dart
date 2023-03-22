@@ -118,31 +118,7 @@ class UpdateProfile extends StatelessWidget {
                   hintName: 'Password',
                   isObscureText: true,
                 ),
-                SizedBox(height: 10.0),
 
-                getTextFormField(
-                  controller: securityLicense,
-                  icon: Icons.security,
-                  hintName: 'Security License',
-                ),
-                SizedBox(height: 10.0),
-                InkWell(
-                  onTap: () {
-                    DatePicker.showDatePicker(context,
-                        showTitleActions: true,
-                        minTime: DateTime(2018, 3, 5),
-                        maxTime: DateTime.now().add(Duration(days: 3600)),
-                        onChanged: (date) {}, onConfirm: (date) {
-                      securityLicenseExpiryDate = date.toString().split(' ')[0];
-                      provider.userModel!.securityLicenseExpiryDate =
-                          securityLicenseExpiryDate;
-                      context
-                          .read<UserCubit>()
-                          .isUpdate(!context.read<UserCubit>().state.isUpdate!);
-                    }, currentTime: DateTime.now(), locale: LocaleType.en);
-                  },
-                  child: SecurityExpiry(),
-                ),
                 SizedBox(height: 10.0),
                 Builder(builder: (context) {
                   return Padding(
@@ -173,12 +149,7 @@ class UpdateProfile extends StatelessWidget {
                     ),
                   );
                 }),
-                SizedBox(height: 10.0),
-                getTextFormField(
-                  controller: ofa,
-                  icon: Icons.document_scanner,
-                  hintName: 'OFA',
-                ),
+
                 SizedBox(height: 10.0),
                 InkWell(
                   onTap: () {
@@ -196,7 +167,24 @@ class UpdateProfile extends StatelessWidget {
                   },
                   child: OfaExpiry(context),
                 ),
-
+                SizedBox(height: 10.0),
+                InkWell(
+                  onTap: () {
+                    DatePicker.showDatePicker(context,
+                        showTitleActions: true,
+                        minTime: DateTime(2018, 3, 5),
+                        maxTime: DateTime.now().add(Duration(days: 3600)),
+                        onChanged: (date) {}, onConfirm: (date) {
+                      securityLicenseExpiryDate = date.toString().split(' ')[0];
+                      provider.userModel!.securityLicenseExpiryDate =
+                          securityLicenseExpiryDate;
+                      context
+                          .read<UserCubit>()
+                          .isUpdate(!context.read<UserCubit>().state.isUpdate!);
+                    }, currentTime: DateTime.now(), locale: LocaleType.en);
+                  },
+                  child: SecurityExpiry(),
+                ),
                 SizedBox(height: 10.0),
                 Container(
                   margin: EdgeInsets.all(20.0),
@@ -227,7 +215,7 @@ class UpdateProfile extends StatelessWidget {
                               provider.userModel!.securityLicense.toString());
                           sp.setString(
                               'ofa', provider.userModel!.ofa.toString());
-
+                          context.read<UserCubit>().setWarning(true);
                           sp.setString("userData",
                               jsonEncode(provider.userModel!.toMap()));
                           alertDialog(context, "User Updated");
@@ -240,24 +228,25 @@ class UpdateProfile extends StatelessWidget {
                     borderRadius: BorderRadius.circular(30.0),
                   ),
                 ),
-
-                //Delete
-
-                Container(
-                  margin: EdgeInsets.all(20.0),
-                  width: double.infinity,
-                  child: TextButton(
-                    child: Text(
-                      'Delete',
-                      style: TextStyle(color: Colors.white),
+                Builder(builder: (context) {
+                  return SwitchListTile(
+                    title: Text(
+                      'Dyslexic',
+                      style: TextStyle(
+                          fontFamily: context.watch<UserCubit>().state.font),
                     ),
-                    onPressed: () {},
-                  ),
-                  decoration: BoxDecoration(
-                    color: Colors.blue,
-                    borderRadius: BorderRadius.circular(30.0),
-                  ),
-                ),
+                    subtitle: Text(
+                      "May help in reading",
+                      style: TextStyle(
+                          fontFamily: context.watch<UserCubit>().state.font),
+                    ),
+                    onChanged: (bool value) {
+                      context.read<UserCubit>().setIsDyslexic(value);
+                    },
+                    value: context.watch<UserCubit>().state.isDyslexic,
+                  );
+                }),
+                //Delete
               ],
             ),
           ),

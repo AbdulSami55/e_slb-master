@@ -138,6 +138,7 @@ CREATE TABLE company(
     List<DailyReportNotes> allDailyReport = allRows
         .map((dailyReport) => DailyReportNotes.fromJson(dailyReport))
         .toList();
+
     return allDailyReport;
   }
 
@@ -158,6 +159,7 @@ CREATE TABLE company(
     Database db = await instance.database;
     int result = await db.update('notes', notes.toMap(),
         where: 'date=?', whereArgs: [notes.date]);
+
     return result;
   }
 
@@ -167,6 +169,7 @@ CREATE TABLE company(
     List<DailyReportNotes> allNotes =
         allRows.map((notes) => DailyReportNotes.fromJson(notes)).toList();
     DailyReportNotes? notes;
+    allNotes.removeWhere((element) => element.dailyReportId == null);
     if (allNotes.length > 0) {
       DateTime dt1 = DateTime.parse(
           "${allNotes.last.dateCreated!.split(' ')[0]} 00:00:00");

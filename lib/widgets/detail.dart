@@ -1,5 +1,4 @@
 // ignore_for_file: must_be_immutable
-
 import 'dart:io';
 import 'dart:typed_data';
 import 'package:flutter/cupertino.dart';
@@ -129,10 +128,6 @@ class DetailScreen extends StatelessWidget {
                           shrinkWrap: true,
                           physics: const BouncingScrollPhysics(),
                           children: [
-                            header(userProvider, state, index),
-                            const SizedBox(
-                              height: 15,
-                            ),
                             ListView.builder(
                                 padding: EdgeInsets.zero,
                                 shrinkWrap: true,
@@ -218,6 +213,7 @@ class DetailScreen extends StatelessWidget {
   Column header(UserCubit userProvider, DailyReportsState state, int index,
       {int? logIndex}) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -230,15 +226,15 @@ class DetailScreen extends StatelessWidget {
         const SizedBox(
           height: 15,
         ),
+        mytext(
+            "",
+            state.tempdailyreports[index].logs[logIndex ?? 0].weather
+                .toString()),
+        const SizedBox(
+          height: 15,
+        ),
         Row(
           children: [
-            mytext(
-                "",
-                state.tempdailyreports[index].logs[logIndex ?? 0].weather
-                    .toString()),
-            const SizedBox(
-              width: 10,
-            ),
             Flexible(
               child: mytext(
                   "",
@@ -247,12 +243,34 @@ class DetailScreen extends StatelessWidget {
             )
           ],
         ),
+        userProvider.state.userModel!.ofaExpiryDate.toString() == "null"
+            ? const Padding(padding: EdgeInsets.zero)
+            : mytext("OFA: ",
+                userProvider.state.userModel!.ofaExpiryDate.toString()),
+        const SizedBox(
+          height: 10,
+        ),
+        userProvider.state.userModel!.ofaExpiryDate.toString() == "null"
+            ? const Padding(padding: EdgeInsets.zero)
+            : mytext(
+                "Security: ",
+                userProvider.state.userModel!.securityLicenseExpiryDate
+                    .toString()),
         const SizedBox(
           height: 15,
         ),
-        Text(
-          state.tempdailyreports[index].notes.toString(),
-          softWrap: true,
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              "Notes:",
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+            Text(
+              state.tempdailyreports[index].notes.toString(),
+              softWrap: true,
+            ),
+          ],
         ),
       ],
     );
@@ -325,13 +343,21 @@ class DetailScreen extends StatelessWidget {
       children: [
         status
             ? state.tempdailyreports[index].logs[notes_index].logo != null
-                ? CircleAvatar(
-                    radius: 40,
-                    backgroundImage: MemoryImage(Uint8List.fromList(state
-                        .tempdailyreports[index]
-                        .logs[notes_index]
-                        .logo!
-                        .codeUnits)),
+                ? Column(
+                    children: [
+                      CircleAvatar(
+                        radius: 40,
+                        backgroundImage: MemoryImage(Uint8List.fromList(state
+                            .tempdailyreports[index]
+                            .logs[notes_index]
+                            .logo!
+                            .codeUnits)),
+                      ),
+                      header(userProvider, state, index, logIndex: notes_index),
+                      const SizedBox(
+                        height: 15,
+                      ),
+                    ],
                   )
                 : Text(
                     "${state.tempdailyreports[index].logs[notes_index].company.toString()}")
@@ -354,20 +380,25 @@ class DetailScreen extends StatelessWidget {
             ? signature(state, index)
             : const Padding(padding: EdgeInsets.zero),
         signatureStatus
-            ? Row(
-                mainAxisAlignment: MainAxisAlignment.end,
+            ? Column(
                 children: [
-                  mytext("Page ", (pageNumber).toString()),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      mytext("Page ", (pageNumber).toString()),
+                    ],
+                  ),
+                  const Divider()
                 ],
               )
             : const Padding(padding: EdgeInsets.zero),
-        headerStatus
-            ? Padding(
-                padding: const EdgeInsets.only(top: 16.0),
-                child:
-                    header(userProvider, state, index, logIndex: notes_index),
-              )
-            : const Padding(padding: EdgeInsets.zero)
+        // headerStatus
+        //     ? Padding(
+        //         padding: const EdgeInsets.only(top: 16.0),
+        //         child:
+        //             header(userProvider, state, index, logIndex: notes_index),
+        //       )
+        //     : const Padding(padding: EdgeInsets.zero)
       ],
     );
   }

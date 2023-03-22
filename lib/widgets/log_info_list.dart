@@ -1,10 +1,15 @@
 // ignore_for_file: must_be_immutable
 
+import 'dart:typed_data';
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_complete_guide/Bloc/Company/company_cubit.dart';
+import 'package:flutter_complete_guide/Bloc/Company/company_state.dart';
 import 'package:flutter_complete_guide/Bloc/DailyReportNotes/dailyreports_cubit.dart';
 import 'package:flutter_complete_guide/Bloc/DailyReportNotes/dailyreports_state.dart';
-import 'package:flutter_complete_guide/Comm/commHelper.dart';
+
 import '../DatabaseHandler/DbHelper.dart';
 import '../models/daily_report_model.dart';
 
@@ -30,28 +35,68 @@ class LogInfoList extends StatelessWidget {
                   ),
                 ],
               )
-            : ListView(
-                physics: const BouncingScrollPhysics(),
-                shrinkWrap: true,
+            : Stack(
                 children: [
-                  ListView.builder(
+                  BlocBuilder<CompanyCubit, CompanyState>(
+                      builder: (context, state) {
+                    return Positioned(
+                      bottom: 20,
+                      top: 20,
+                      right: 20,
+                      left: 20,
+                      child: state.img != null
+                          ? Container(
+                              height: 100,
+                              width: 100,
+                              child: ImageFiltered(
+                                imageFilter:
+                                    ImageFilter.blur(sigmaY: 5, sigmaX: 5),
+                                child: Image.memory(
+                                  Uint8List.fromList(
+                                      state.company!.image!.codeUnits),
+                                  fit: BoxFit.fill,
+                                  gaplessPlayback: true,
+                                ),
+                              ),
+                            )
+                          : const Padding(
+                              padding: EdgeInsets.zero,
+                            ),
+                    );
+                  }),
+                  ListView(
                     physics: const BouncingScrollPhysics(),
                     shrinkWrap: true,
-                    itemBuilder: (ctx, index) {
-                      return ListView.builder(
-                          physics: const BouncingScrollPhysics(),
-                          shrinkWrap: true,
-                          itemCount: state.lstdailyreports[index].logs.length,
-                          itemBuilder: (context, notes_index) {
-                            return logEntryItem(index, notes_index,
-                                curScaleFactor, context, state);
-                          });
-                    },
-                    itemCount: state.lstdailyreports.length,
+                    children: [
+                      ListView.builder(
+                        physics: const BouncingScrollPhysics(),
+                        shrinkWrap: true,
+                        itemBuilder: (ctx, index) {
+                          return ListView.builder(
+                              physics: const BouncingScrollPhysics(),
+                              shrinkWrap: true,
+                              itemCount:
+                                  state.lstdailyreports[index].logs.length,
+                              itemBuilder: (context, notes_index) {
+                                return Column(
+                                  children: [
+                                    logEntryItem(index, notes_index,
+                                        curScaleFactor, context, state),
+                                    Divider(
+                                      height: 0.8,
+                                      thickness: 0.5,
+                                    )
+                                  ],
+                                );
+                              });
+                        },
+                        itemCount: state.lstdailyreports.length,
+                      ),
+                      const SizedBox(
+                        height: 140,
+                      )
+                    ],
                   ),
-                  const SizedBox(
-                    height: 140,
-                  )
                 ],
               ),
       );

@@ -53,13 +53,15 @@ class DailyReportsCubit extends Cubit<DailyReportsState> {
   setTempList(String text) {
     List<DailyReportNotes> temp = [];
     for (DailyReportNotes i in state.lstdailyreports) {
-      DailyReportNotes d = DailyReportNotes(
-          notes: i.notes,
-          dailyReportId: i.dailyReportId,
-          dateCreated: i.dateCreated,
-          logs: i.logs,
-          signature: i.signature);
-      temp.add(d);
+      if (i.dailyReportId != null) {
+        DailyReportNotes d = DailyReportNotes(
+            notes: i.notes,
+            dailyReportId: i.dailyReportId,
+            dateCreated: i.dateCreated,
+            logs: i.logs,
+            signature: i.signature);
+        temp.add(d);
+      }
     }
     if (state.filter) {
       for (DailyReportNotes dailyReportNotes in state.lstdailyreports) {
@@ -90,6 +92,14 @@ class DailyReportsCubit extends Cubit<DailyReportsState> {
         tempdailyreports: temp,
         lstdailyreports: state.lstdailyreports,
         screenshotController: state.screenshotController));
+  }
+
+  setLocation(String location) {
+    emit(state.copywith(location: location));
+  }
+
+  setWeather(String weather) {
+    emit(state.copywith(weather: weather));
   }
   // setLog(bool log) {
   //   emit(state.copywith(log: log));

@@ -55,26 +55,12 @@ class _HeaderInfoState extends State<HeaderInfo> {
                   width: MediaQuery.of(context).size.width * 0.35,
                 ),
                 state.company != null
-                    ? state.company!.image != null
-                        ? Container(
-                            height: 80,
-                            width: 80,
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(99),
-                              child: Image.memory(
-                                Uint8List.fromList(
-                                    state.company!.image!.codeUnits),
-                                fit: BoxFit.cover,
-                              ),
-                            ),
-                          )
-                        : Text(
-                            state.company!.companyName.toString(),
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontFamily:
-                                    context.watch<UserCubit>().state.font),
-                          )
+                    ? Text(
+                        state.company!.companyName.toString(),
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontFamily: context.watch<UserCubit>().state.font),
+                      )
                     : Image.asset(
                         'lib/images/logo.png',
                         width: MediaQuery.of(context).size.width * .2,
@@ -114,65 +100,60 @@ class _HeaderInfoState extends State<HeaderInfo> {
         Padding(
           padding: const EdgeInsets.all(8.0),
           child: Container(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  '${context.read<DailyReportsCubit>().state.weather}',
-                  style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontFamily: context.watch<UserCubit>().state.font),
-                ),
-                const SizedBox(
-                  width: 10,
-                ),
-                Flexible(
-                  child: Text(
-                    '${context.read<DailyReportsCubit>().state.location}',
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 14 * curScaleFactor,
-                        fontFamily: context.watch<UserCubit>().state.font),
-                  ),
-                ),
-              ],
+            child: Text(
+              '${context.read<DailyReportsCubit>().state.weather}',
+              style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontFamily: context.watch<UserCubit>().state.font),
             ),
           ),
         ),
-        !isopen
-            ? const Padding(padding: EdgeInsets.zero)
-            : context.watch<UserCubit>().state.islisence
-                ? Builder(builder: (context) {
-                    return Padding(
-                      padding: const EdgeInsets.only(
-                          left: 8.0, bottom: 8.0, right: 6.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'Security Lisence: ${context.read<UserCubit>().state.userModel!.securityLicense.toString()}',
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 14 * curScaleFactor,
-                                fontFamily:
-                                    context.watch<UserCubit>().state.font),
-                          ),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          Text(
-                            'OFA: ${context.read<UserCubit>().state.userModel!.ofa.toString()}',
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 14 * curScaleFactor,
-                                fontFamily:
-                                    context.watch<UserCubit>().state.font),
-                          ),
-                        ],
-                      ),
-                    );
-                  })
-                : const Padding(padding: EdgeInsets.zero),
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Flexible(
+            child: Text(
+              '${context.read<DailyReportsCubit>().state.location}',
+              style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 14 * curScaleFactor,
+                  fontFamily: context.watch<UserCubit>().state.font),
+            ),
+          ),
+        ),
+        // !isopen
+        //     ? const Padding(padding: EdgeInsets.zero)
+        //     : context.watch<UserCubit>().state.islisence
+        //         ? Builder(builder: (context) {
+        //             return Padding(
+        //               padding: const EdgeInsets.only(
+        //                   left: 8.0, bottom: 8.0, right: 6.0),
+        //               child: Column(
+        //                 crossAxisAlignment: CrossAxisAlignment.start,
+        //                 children: [
+        //                   Text(
+        //                     'Security Lisence: ${context.read<UserCubit>().state.userModel!.securityLicense.toString()}',
+        //                     style: TextStyle(
+        //                         fontWeight: FontWeight.bold,
+        //                         fontSize: 14 * curScaleFactor,
+        //                         fontFamily:
+        //                             context.watch<UserCubit>().state.font),
+        //                   ),
+        //                   const SizedBox(
+        //                     height: 10,
+        //                   ),
+        //                   Text(
+        //                     'OFA: ${context.read<UserCubit>().state.userModel!.ofa.toString()}',
+        //                     style: TextStyle(
+        //                         fontWeight: FontWeight.bold,
+        //                         fontSize: 14 * curScaleFactor,
+        //                         fontFamily:
+        //                             context.watch<UserCubit>().state.font),
+        //                   ),
+        //                 ],
+        //               ),
+        //             );
+        //           })
+        //         : const Padding(padding: EdgeInsets.zero),
         !isopen
             ? InkWell(
                 onTap: () {

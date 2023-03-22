@@ -211,65 +211,47 @@ class _MainDrawerState extends State<MainDrawer> {
                   MaterialPageRoute(builder: (_) => LoginForm()),
                   (Route<dynamic> route) => false);
             }),
-            Container(
-              padding: const EdgeInsets.all(20),
-              child: Text(
-                'Preferances',
-                style: TextStyle(
-                    fontFamily: context.watch<UserCubit>().state.font,
-                    fontSize: 18),
-              ),
-            ),
+            // Container(
+            //   padding: const EdgeInsets.all(20),
+            //   child: Text(
+            //     'Preferances',
+            //     style: TextStyle(
+            //         fontFamily: context.watch<UserCubit>().state.font,
+            //         fontSize: 18),
+            //   ),
+            // ),
             Expanded(
               child: ListView(
                 shrinkWrap: true,
                 physics: const BouncingScrollPhysics(),
                 children: [
-                  Builder(builder: (context) {
-                    return SwitchListTile(
-                      title: Text(
-                        'Show Lisence',
-                        style: TextStyle(
-                            fontFamily: context.watch<UserCubit>().state.font),
-                      ),
-                      onChanged: (bool value) {
-                        context.read<UserCubit>().setIsLisence(value);
-                      },
-                      value: context.watch<UserCubit>().state.islisence,
-                    );
-                  }),
-                  Builder(builder: (context) {
-                    return SwitchListTile(
-                      title: Text(
-                        'Dyslexic',
-                        style: TextStyle(
-                            fontFamily: context.watch<UserCubit>().state.font),
-                      ),
-                      subtitle: Text(
-                        "May help in reading",
-                        style: TextStyle(
-                            fontFamily: context.watch<UserCubit>().state.font),
-                      ),
-                      onChanged: (bool value) {
-                        context.read<UserCubit>().setIsDyslexic(value);
-                      },
-                      value: context.watch<UserCubit>().state.isDyslexic,
-                    );
-                  }),
+                  // Builder(builder: (context) {
+                  //   return SwitchListTile(
+                  //     title: Text(
+                  //       'Show Lisence',
+                  //       style: TextStyle(
+                  //           fontFamily: context.watch<UserCubit>().state.font),
+                  //     ),
+                  //     onChanged: (bool value) {
+                  //       context.read<UserCubit>().setIsLisence(value);
+                  //     },
+                  //     value: context.watch<UserCubit>().state.islisence,
+                  //   );
+                  // }),
 
-                  Builder(builder: (context) {
-                    return SwitchListTile(
-                      title: Text(
-                        'Show Warning',
-                        style: TextStyle(
-                            fontFamily: context.watch<UserCubit>().state.font),
-                      ),
-                      onChanged: (bool value) {
-                        context.read<UserCubit>().setWarning(value);
-                      },
-                      value: context.watch<UserCubit>().state.isWarning,
-                    );
-                  }),
+                  // Builder(builder: (context) {
+                  //   return SwitchListTile(
+                  //     title: Text(
+                  //       'Show Warning',
+                  //       style: TextStyle(
+                  //           fontFamily: context.watch<UserCubit>().state.font),
+                  //     ),
+                  //     onChanged: (bool value) {
+                  //       context.read<UserCubit>().setWarning(value);
+                  //     },
+                  //     value: context.watch<UserCubit>().state.isWarning,
+                  //   );
+                  // }),
 
                   // _buildListTileSwitch(
                   //   '24 clock',
